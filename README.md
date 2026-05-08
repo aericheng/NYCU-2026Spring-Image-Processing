@@ -216,14 +216,3 @@ The full discussion lives in `113950011.pdf §4`. Highlights:
   faster because of the small constant factor. Frequency wins on large
   images and large kernels.
 
----
-
-## 8. Submission
-
-| File | Purpose |
-|---|---|
-| `113950011.pdf` | Report (5 pages) |
-| `113950011.zip` | Source code + test images (no results/, no internal tests) |
-
-Filename, archive format (`.zip`), and required sections (Method /
-Result / Discussion) all conform to the spec on `HW4.pdf` page 6.
