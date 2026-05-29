@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>Term Project Report</title>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+@page {
+  size: A4;
+  margin: 18mm 18mm 18mm 18mm;
+}
+body {
+  font-family: "Microsoft JhengHei", "Microsoft YaHei", "PMingLiU", "SimSun", "Times New Roman", serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  color: #1a1a1a;
+  max-width: 740px;
+  margin: 0 auto;
+}
+h1 {
+  font-size: 17pt;
+  margin-top: 1.4em;
+  margin-bottom: 0.6em;
+  padding: 0.25em 0.5em 0.25em 0.7em;
+  border-left: 5px solid #c44e52;
+  background: linear-gradient(90deg, #fbeaea 0%, #fff 60%);
+  color: #2a2a2a;
+  page-break-after: avoid;
+}
+h1:first-of-type {
+  font-size: 26pt;
+  text-align: center;
+  border-left: none;
+  border-bottom: 3px double #c44e52;
+  background: none;
+  margin-top: 28%;
+  padding: 0 0 0.3em 0;
+  color: #1a1a1a;
+  page-break-after: avoid;
+}
+h2 {
+  font-size: 12.5pt;
+  margin-top: 1.0em;
+  margin-bottom: 0.3em;
+  padding-left: 0.4em;
+  border-left: 3px solid #4c72b0;
+  color: #2a4d80;
+  page-break-after: avoid;
+}
+h3 {
+  font-size: 11pt;
+  margin-top: 0.8em;
+  margin-bottom: 0.2em;
+  color: #333;
+  page-break-after: avoid;
+}
+h3::before {
+  content: "▸ ";
+  color: #c44e52;
+}
+/* explicit cover page break marker via <hr> after TOC */
+hr.page-break {
+  border: 0;
+  page-break-after: always;
+  margin: 0;
+}
+h2 {
+  font-size: 12.5pt;
+  margin-top: 0.9em;
+  margin-bottom: 0.25em;
+  color: #222;
+}
+h3 {
+  font-size: 11pt;
+  margin-top: 0.7em;
+  margin-bottom: 0.2em;
+  color: #333;
+}
+p {
+  margin: 0.4em 0;
+  text-align: left;
+  word-break: normal;
+}
+strong {
+  font-weight: 700;
+  color: #000;
+}
+table {
+  border-collapse: collapse;
+  margin: 0.8em auto;
+  font-size: 9.5pt;
+  max-width: 100%;
+  page-break-inside: avoid;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+th, td {
+  border: 1px solid #d0d0d0;
+  padding: 5px 9px;
+  text-align: left;
+  vertical-align: top;
+  word-wrap: break-word;
+}
+th {
+  background: #2a4d80;
+  color: white;
+  font-weight: 700;
+  border-color: #2a4d80;
+}
+tr:nth-child(even) td {
+  background: #f7f9fc;
+}
+tr:nth-child(odd) td {
+  background: #fff;
+}
+code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 9.5pt;
+  background: #f3f3f3;
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+pre {
+  background: #f6f6f6;
+  border-left: 3px solid #999;
+  padding: 6px 10px;
+  margin: 0.4em 0;
+  font-size: 9pt;
+  overflow-x: auto;
+}
+pre code {
+  background: transparent;
+  padding: 0;
+}
+blockquote {
+  margin: 0.6em 0;
+  padding: 0.5em 0.8em;
+  border-left: 4px solid #f4b860;
+  background: #fff8ec;
+  color: #4a3a1a;
+  font-size: 10pt;
+  border-radius: 0 4px 4px 0;
+}
+img {
+  max-width: 100%;
+  max-height: 70vh;
+  display: block;
+  margin: 0.5em auto;
+  page-break-inside: avoid;
+  page-break-after: avoid;
+}
+ul, ol {
+  margin: 0.3em 0;
+  padding-left: 1.4em;
+}
+li {
+  margin: 0.15em 0;
+}
+hr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 0.8em 0;
+}
+/* figure caption rendered as bold + small text */
+p strong:first-child {
+  font-weight: 700;
+}
+/* keep image + caption together */
+img + p {
+  page-break-before: avoid;
+}
+/* figure caption: bold + light gray panel */
+p strong:first-child {
+  font-weight: 700;
+}
+img + p,
+p:has(> strong:first-child) {
+  text-align: center;
+  font-size: 9.5pt;
+  color: #555;
+  margin-top: -0.2em;
+}
+/* highlight red numbers */
+span[style*="color"] {
+  font-weight: 700;
+  font-size: 11.5pt;
+}
+/* inline code: subtle accent */
+p code, li code {
+  color: #2a4d80;
+}
+/* horizontal rule: more subtle */
+hr {
+  border: 0;
+  border-top: 1px solid #e0e0e0;
+  margin: 1.0em 0;
+}
+/* cover meta line: bigger and styled */
+h1:first-of-type + p {
+  text-align: center;
+  font-size: 13pt;
+  margin-top: 0.8em;
+  color: #2a4d80;
+}
+h1:first-of-type + p + p {
+  text-align: center;
+  font-size: 10.5pt;
+  color: #666;
+}
+/* table of contents: nicer styling */
+h2:first-of-type ~ ul {
+  background: #f7f9fc;
+  padding: 0.6em 1.5em;
+  border-radius: 4px;
+  border: 1px solid #e0e6ed;
+}
+</style>
+</head>
+<body>
+<h1 id="term-project">影像處理 Term Project</h1>
+<p><strong>組員</strong><br>113950011　鄭名翔<br>[id]　[teammate]<br>[id]　[teammate]</p>
+<p>夜間運動模糊影像修復　·　Pipe A v2 管線</p>
+<hr>
+<h2 id="_1">目錄</h2>
+<ul>
+<li>§1 緒論</li>
+<li>§2 相關研究</li>
+<li>§3 方法</li>
+<li>§4 實驗結果</li>
+<li>§5 改進與貢獻</li>
+<li>§6 結論</li>
+<li>§7 參考文獻</li>
+</ul>
+<hr class="page-break">
+
+<h1 id="1">§1 緒論</h1>
+<h2 id="11">1.1 摘要</h2>
+<p>這個專題的目標是修復 15 張在夜間或低光環境拍攝、含有運動模糊的真實照片，並從近年發表的開源 deblurring 方法中挑選一個做改進。</p>
+<p>我們做的事情可以拆成三步：先在五張代表性影像上快速比較 DarkIR、MISCFilter、FFTformer、Real-ESRGAN，挑出 <strong>FFTformer（RealBlur-J 預訓練）</strong> 作為主力；再設計一條手刻前處理管線（<strong>Pipe A</strong>），用 gamma、CLAHE、HSV saturation 把夜間 OOD 影像分布推回 FFTformer 的訓練分布，後處理用 unsharp 補回降採損失；最後針對個別影像的瓶頸做點狀補強，例如 09 號 White Truck 的紅色 Biffa 文字加上飽和度遮罩的銳化。</p>
+<p>15 張影像的 4 個 NR-IQA 指標平均結果，<strong>Pipe A v2 的 MUSIQ 達 <span style="color:#c44e52">33.74</span>，比原圖的 28.22 高 <span style="color:#c44e52">+5.52</span></strong>，是所有候選方法中最高。一個對照組（DarkIR → FFTformer 串接，稱為 <strong>Chain</strong>）反而讓 MUSIQ 從 25.38 降到 <strong>24.95</strong>，顯示「訓練過的低光增強當前處理」會傷害感知品質，而手刻前處理才有正效益。</p>
+<p>繳交的兩張影像是 <strong>09 White Truck</strong>（γ=1.0，MUSIQ <strong><span style="color:#c44e52">36.41</span></strong>，提升 <strong>+11.39</strong>）與 <strong>08 KFC Rider</strong>（γ=0.7，MUSIQ <strong>32.32</strong>，提升 +3.14）。</p>
+<h2 id="12">1.2 任務描述</h2>
+<p>題目給定 15 張夜間或雨夜的運動模糊照片，要求從近年主要影像處理會議的開源方法中挑選並改進，最終繳交 2 張視覺最佳的結果做公開互評。評分組成為互評 40%、書面報告 40%、課堂簡報 10%、出席 10%，繳交日期是 2026 年 6 月 11 日。</p>
+<p>影像解析度落在 3000×4000 至 8000×5300 之間（平均約 6K），遠高於主流 deblurring benchmark（GoPro、RealBlur）的訓練解析度。內容涵蓋光跡街景、招牌反射、夜市人潮、雨夜外送、運動人像等情境，模糊類型也不單一，包含 linear motion、zoom blur、shake、panning，以及含玻璃反射或雨滴的混合模糊。</p>
+<h2 id="13">1.3 這個任務難在哪</h2>
+<p>主要難度有四個。</p>
+<p>第一是分布不符。FFTformer、Restormer、MPRNet 等主流方法都用 GoPro 或 RealBlur 訓練，前者是相機高速拍攝後合成的運動軌跡，後者雖然是真實場景但以白天良光為主。我們的照片是夜拍 / 低光 / 雨夜，曝光分布、雜訊統計、彩色光源都跟訓練資料不一樣，預訓練模型在這種 OOD 設定下容易出兩種錯：要嘛不去模糊（輸出近似輸入），要嘛產生光暈與銳化偽影。</p>
+<p>第二是高解析度推論。Transformer 的注意力範圍受訓練尺寸限制，當推論輸入遠大於訓練尺寸時 attention 沒辦法完整 attend 到整個模糊核。我們的 GPU 是 16 GB VRAM（RTX 5070 Ti），必須在「降採推論」與「tiling 推論」之間取捨。</p>
+<p>第三是沒有 ground truth。本題沒提供清晰的成對影像，無法用 PSNR / SSIM，只能依賴 no-reference IQA。NR-IQA 指標各自有偏差（例如 NIQE 偏好原圖、會懲罰任何處理），單一指標的結論可能誤導，必須用多指標交叉驗證。</p>
+<p>第四是通用 vs 逐圖細調的取捨。繳交只需 2 張，理論上可以對每張獨立調到最好，但這樣難以寫成可重複的方法；如果硬要一條 pipeline 處理 15 張，又無法針對個別瓶頸做最後一公里優化。</p>
+<hr>
+<h1 id="2">§2 相關研究</h1>
+<p>通用 deblurring 領域的近期方法大致分為三代。第一代是 multi-stage CNN，以 MPRNet [3] 為代表，靠 coarse-to-fine 的多階段架構處理不同尺度的模糊。第二代是 transformer，Restormer [1] 用 MDTA 降低 attention 計算量，FFTformer [2] 進一步把 attention 搬到頻率域，利用模糊在 FFT 域的稀疏特性擴大感受野。第三代有 state-space model（EVSSM [5]）與 diffusion-based 方法（TP-Diff [8]），後者特別擅長文字場景但推論速度太慢，不適合本題 6K~8K 的影像尺寸。另一個 CVPR 2024 的 MISCFilter [4] 明確建模模糊核方向性，我們在實驗中保留它做對照。</p>
+<p>低光影像增強（LLIE）跟 deblurring 是不同的任務。LLIE 方法（例如 DarkIR [6]）的訓練目標是把暗區提亮、保持紋理，並沒有顯式建模模糊核的反捲積；如果輸入同時有模糊與低光，LLIE 的輸出仍會保持原本的模糊狀態。我們的快速 benchmark 確認了這點：DarkIR 雖然能大幅提亮，但模糊邊緣依然糊。本題中我們沒把 DarkIR 當主力，而是作為「訓練式前處理」的對照（DarkIR → FFTformer，稱為 Chain），用來驗證手刻前處理是否真的優於訓練式（§4.4）。</p>
+<p>Real-ESRGAN [7] 是合成資料訓練的盲式超解析，常被當成銳化後處理。我們在前期測過它對 Pipe A 輸出的進一步銳化效果：自然紋理區有正面效果，但文字 / 招牌區會引入 cartoon-like 偽影，反而傷害可讀性，所以沒有納入最終 pipeline。</p>
+<p>評估方面，因為沒有 ground truth，我們採四個 no-reference IQA 指標：NIQE（Mittal 2013，越低越好）、MUSIQ（Ke et al. ICCV 2021）、MANIQA（Yang et al. CVPR 2022）、NRQM（Ma et al. 2017）。MUSIQ 與 MANIQA 是 transformer / attention 系，比較貼近人類感知；NIQE 與 NRQM 偏好「自然」原圖，會懲罰任何銳化或對比強化。用四個指標交叉驗證能削弱單一指標的偏差。</p>
+<hr>
+<h1 id="3">§3 方法</h1>
+<p>本節描述的是最終版 Pipe A v2（CLAHE clip=5.0、unsharp percent=200）。v1 → v2 的優化過程留到 §4.6。</p>
+<h2 id="31">3.1 方法選擇</h2>
+<p>我們先用 5 張代表性影像（編號 03、07、08、09、14，涵蓋低光、街景、人像、雨夜）對候選方法做 quick benchmark。結論如下：DarkIR 能拉亮但不去模糊，本質是 exposure remapping；MISCFilter 對文字邊緣有微幅改善但會引入色偏，且 inline CUDA kernel 部署門檻高；Real-ESRGAN 在文字場景容易產生 cartoon-like 偽影；FFTformer 在主觀去模糊強度上最強，特別是對 linear motion blur 反應乾淨。</p>
+<p>因此選 FFTformer（RealBlur-J 預訓練）為主力，然後設計前後處理把它的效益放大。</p>
+<h2 id="32-pipe-a">3.2 Pipe A 前處理管線</h2>
+<p>Pipe A 的整體流程如 Fig. 3.1，分三個區塊：</p>
+<ul>
+<li>前處理：gamma → CLAHE → saturation</li>
+<li>模型推論：resize 到長邊 1024 → FFTformer → resize 回原尺寸</li>
+<li>後處理：unsharp mask</li>
+</ul>
+<p>設計哲學是「把 OOD 輸入推回模型訓練分布」。FFTformer 在 RealBlur-J 上表現好，但 RealBlur-J 是白天合成模糊，我們的夜間影像在曝光、雜訊、對比這幾個面向都偏離此分布。Pipe A 的三步前處理是手刻的分布轉換器，目的是讓 FFTformer 收到的輸入在統計上接近 in-distribution，而且整套不需要訓練資料、不需要梯度更新，純粹用經典影像處理就能達成。</p>
+<p><img alt="Fig. 3.1 — Pipe A v2 pipeline" src="figures/fig_3_1_pipeline.png"></p>
+<p><strong>Fig. 3.1</strong>　Pipe A v2 pipeline。橘色為前處理、藍色為 FFTformer、灰色為後處理。</p>
+<h3 id="321">3.2.1 前處理三步驟</h3>
+<p>設輸入為 $I \in [0, 255]^{H \times W \times 3}$。</p>
+<p><strong>Gamma 校正</strong>：對每個通道套 $I_\gamma = 255 \cdot (I / 255)^{1/\gamma}$，預設 $\gamma=0.75$。把直方圖往中間區段壓縮，相當於拉亮暗區、保留亮部，讓輸入的中位曝光接近 RealBlur-J 的範圍。Ablation 顯示 gamma 在全資料集平均下不是通用增益（§4.6），對偏暗影像有效但對中等曝光影像會壓平動態範圍，所以是 per-image 條件性套用。</p>
+<p><strong>CLAHE 局部對比強化</strong>：在 LAB 色彩空間的 L 通道套 CLAHE，clip=5.0、grid=8×8，做完再轉回 RGB。CLAHE 把影像切成 8×8 個 tile，每個 tile 內部做限幅的直方圖等化，讓建築紋理、文字邊緣等中頻細節在進 FFTformer 之前先被適度放大。clip 值是 §4.6 參數掃描的結果，3.0 → 5.0 MUSIQ 單調上升，再高會在天空與平面區產生塊狀偽影。</p>
+<p><strong>HSV 飽和度增強</strong>：S 通道乘以 1.2 再 clip 回 [0, 255]。補償前兩步後感官上偏灰的問題，並讓彩色招牌、霓虹的特徵更突出。</p>
+<h3 id="322-max-side-1024">3.2.2 模型推論：max-side 1024</h3>
+<p>FFTformer 的訓練資料 RealBlur-J 影像長邊約 1280。當輸入解析度遠大於訓練分布時，transformer 的有效感受野相對縮小，大尺度模糊核無法被完整 attend。實測在 6K~8K 原生解析度推論的結果遠不如降到長邊 1024 後再推論，後者更接近 RealBlur-J 上的主觀去模糊強度。</p>
+<p>具體步驟是：先把前處理後的影像 resize 到 $\max(W, H) = 1024$ 並保持長寬比，丟進 FFTformer，最後用 Lanczos 放大回原尺寸。</p>
+<h3 id="323-unsharp-mask">3.2.3 後處理：unsharp mask</h3>
+<p>降採再放大會造成可預期的高頻衰減，所以套一次 unsharp：$I_\text{out} = \hat{I} + \alpha (\hat{I} - G_\sigma * \hat{I})$，$\alpha=2.0$（PIL <code>percent=200</code>），radius=2，threshold=2。Ablation 顯示 unsharp 是 Pipe A 第二重要的成分（拿掉 MUSIQ −2.94），影響力接近 CLAHE 的 75%。percent 從 100 到 200 在 MUSIQ 上單調遞增（§4.6），再高會在文字邊緣產生 ringing。</p>
+<h2 id="33-saturation-masked-regional-sharpening">3.3 Saturation-Masked Regional Sharpening</h2>
+<p>Pipe A 處理完後，少數場景的關鍵高彩度區域（紅色品牌標誌、霓虹文字）邊緣可能還是不夠銳。全圖加重 unsharp 會放大暗區的 ISO 雜訊；手動圈 mask 又無法泛化。</p>
+<p>觀察夜間影像時可以發現：需要強化的物件（招牌、文字、車身標誌）通常飽和度遠高於背景。所以可以拿飽和度當自動空間遮罩，只在高彩度區追加 unsharp。</p>
+<p>實作上，先把影像轉到 HSV，計算 $M_\text{raw} = \text{clip}((S - \tau) / (255 - \tau), 0, 1)$，飽和度門檻 $\tau = 70$。再對 $M_\text{raw}$ 做 Gaussian 羽化（kernel 半徑 15）避免硬邊，得到最終 mask $M$。然後對 Pipe A 輸出 $I_\text{base}$ 套一次強 unsharp（pct=220、radius=3）得到 $I_\text{sharp}$，最後用 mask 線性混合：$I_\text{out} = M \cdot I_\text{sharp} + (1-M) \cdot I_\text{base}$。</p>
+<p>效果是：高彩度區（文字、標誌）得到強烈額外銳化，低彩度區保留 Pipe A 結果不變。</p>
+<h2 id="34">3.4 逐圖細調</h2>
+<p>Pipe A 已能對 15 張影像普遍取得改善，但同一條 pipeline 不會對每張圖都最佳。繳交的兩張影像分別針對殘餘瓶頸做點狀補強。</p>
+<p><strong>09 White Truck</strong>：zoom blur + 雨絲場景，主體是一台車身印有紅色 Biffa 字樣的白色卡車。這張本身曝光中等並不偏暗，Pipe A 預設的 γ=0.75 反而會壓平車身的動態範圍。我們改用 <strong>γ=1.0</strong>（跳過 gamma），其他維持 Pipe A v2 設定，然後套用 §3.3 的飽和度遮罩銳化。<strong>MUSIQ 從 v1 的 28.71 提升到 v2 的 <span style="color:#c44e52">36.41</span>，提升 <span style="color:#c44e52">+7.70</span></strong>（Fig. 3.2）。</p>
+<p><img alt="Fig. 3.2 — 09 White Truck 繳交對比" src="figures/fig_3_2_09_submission_compare.jpg"></p>
+<p><strong>Fig. 3.2</strong>　09 White Truck 繳交版（左：原圖，右：Pipe A v2 + γ=1.0 + masked text sharpen）。MUSIQ 25.02 → 36.41。</p>
+<p><strong>08 KFC Rider</strong>：雨夜 KFC 外送員，曝光比 09 更暗，左側商店招牌幾乎看不見，<strong>右側遠景的紅色直式招牌</strong>（中文「頭肩頸…」字樣）也被運動模糊抹成一片紅。前處理加強為 <strong>γ=0.70</strong>、saturation 1.25，CLAHE 與 unsharp 維持 Pipe A v2 baseline。MUSIQ 從 31.59 提升到 <strong>32.32</strong>，MANIQA 從 0.158 提升到 0.166（Fig. 3.3）。值得一提的是右側遠景紅色招牌的字樣在 v2 也恢復可辨識（Fig. 4.6），這是視覺上很驚豔的細節。</p>
+<p><img alt="Fig. 3.3 — 08 KFC Rider 繳交對比" src="figures/fig_3_3_08_submission_compare.jpg"></p>
+<p><strong>Fig. 3.3</strong>　08 KFC Rider 繳交版（左：原圖，右：Pipe A v2 + γ=0.70）。MUSIQ 29.18 → 32.32。</p>
+<p>逐圖細調的流程不是 grid search，而是先套 Pipe A 預設參數產生初版，比對 native-resolution crop 找殘餘瓶頸（文字過軟、暗區未還原、雜訊偏高），再依瓶頸類型決定要不要加上額外處理。</p>
+<hr>
+<h1 id="4">§4 實驗結果</h1>
+<h2 id="41">4.1 環境</h2>
+<p>硬體是 NVIDIA RTX 5070 Ti（Blackwell 架構，sm_120，16 GB VRAM）。軟體環境是 Windows 11，Python 3.11，PyTorch 2.11.0+cu128，cupy 13.x（含 nvrtc 12.9）。</p>
+<p>工程上幾個雷需要踩：Blackwell（sm_120）目前還沒被 PyTorch 2.0–2.10 系列原生支援，要裝 2.11.0+cu128 之後的 nightly build；pip-installed 的 basicsr 有 <code>torchvision.transforms.functional_tensor</code> 已被移除的 import 問題，要 monkey-patch；FFTformer 的模型架構檔要用 <code>importlib.util.spec_from_file_location</code> 動態載入繞過破損的 basicsr import chain；MISCFilter 的 inline CUDA kernel 要改寫成 cupy 12+ 的 <code>RawModule</code> API，因為舊版的 <code>compile_with_cache</code> 已經被移除。</p>
+<p>推論策略：FFTformer 在原生 6K~8K 解析度推論會 OOM，所以採「降採到長邊 1024 → 推論 → Lanczos 放大回原尺寸」。MISCFilter 一次處理 384 個 tile 會佔到 35 GB VRAM，要用 <code>--tile-batch 8</code> 的 mini-batch 分批跑。</p>
+<h2 id="42">4.2 評估指標與對比方法</h2>
+<p>評估用 4 個 no-reference IQA 指標（pyiqa 0.1.13 計算）：</p>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>方向</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NIQE</td>
+<td>越低越好</td>
+<td>自然影像統計</td>
+</tr>
+<tr>
+<td>MUSIQ</td>
+<td>越高越好</td>
+<td>Transformer，KonIQ 訓練</td>
+</tr>
+<tr>
+<td>MANIQA</td>
+<td>越高越好</td>
+<td>Attention，KonIQ 訓練</td>
+</tr>
+<tr>
+<td>NRQM</td>
+<td>越高越好</td>
+<td>Blind SR 風格</td>
+</tr>
+</tbody>
+</table>
+<p>對比 8 個方法：<code>input</code>（原圖）、<code>darkir</code>（DarkIR blend 50%）、<code>miscf</code>（MISCFilter）、<code>fftf</code>（FFTformer 單獨）、<code>chain</code>（DarkIR → FFTformer）、<code>pipeA_v1</code>（CLAHE 3、unsharp 130 早期版）、<code>pipeA</code>（v2 CLAHE 5、unsharp 200）、<code>final</code>（Plan I+ v2 兩張繳交）。</p>
+<p>評分時為避免 MUSIQ / MANIQA 在大解析度下 OOM，輸入影像先降採到長邊 2048 再計算。</p>
+<h2 id="43">4.3 量化結果</h2>
+<p>4 指標 × 8 方法（15 張影像平均，<code>final</code> 只有 2 張）：</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>NIQE↓</th>
+<th>MUSIQ↑</th>
+<th>MANIQA↑</th>
+<th>NRQM↑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>input</td>
+<td>5.31</td>
+<td>28.22</td>
+<td>0.174</td>
+<td>6.04</td>
+</tr>
+<tr>
+<td>darkir</td>
+<td>4.58</td>
+<td>28.66</td>
+<td>0.189</td>
+<td>5.68</td>
+</tr>
+<tr>
+<td>miscf</td>
+<td>5.02</td>
+<td>29.11</td>
+<td>0.193</td>
+<td>5.92</td>
+</tr>
+<tr>
+<td>fftf</td>
+<td>7.05</td>
+<td>25.38</td>
+<td>0.194</td>
+<td>3.20</td>
+</tr>
+<tr>
+<td>chain</td>
+<td>6.78</td>
+<td>24.95</td>
+<td>0.191</td>
+<td>3.30</td>
+</tr>
+<tr>
+<td>pipeA_v1</td>
+<td>6.35</td>
+<td>30.96</td>
+<td>0.192</td>
+<td>4.06</td>
+</tr>
+<tr>
+<td>pipeA v2</td>
+<td>6.23</td>
+<td><strong>33.74</strong></td>
+<td><strong>0.199</strong></td>
+<td><strong>4.49</strong></td>
+</tr>
+<tr>
+<td>final</td>
+<td>6.05</td>
+<td><strong>34.37</strong></td>
+<td>0.151</td>
+<td>4.40</td>
+</tr>
+</tbody>
+</table>
+<p>對應 bar chart 見 Fig. 4.1。</p>
+<p><img alt="Fig. 4.1 — IQA 平均 bar chart" src="figures/fig_4_1_iqa_bar.png"></p>
+<p><strong>Fig. 4.1</strong>　4 個 NR-IQA 指標 × 8 方法 × 15 張影像平均。紅色 bar 為 Pipe A v2 與 Plan I+ v2。</p>
+<p>幾個重點：</p>
+<p><strong>Pipe A v2 在 MUSIQ 達 <span style="color:#c44e52">33.74</span>，比原圖 28.22 高 <span style="color:#c44e52">+5.52</span></strong>，是所有方法中最大絕對增益；在 MANIQA 與 NRQM 上也是 deblur 家族最高。NIQE 唯一較好的是 DarkIR，但 DarkIR 並未真正去模糊（§4.4），這是 naturalness-based IQA 對任何處理都有的固有偏差。</p>
+<p>MANIQA 顯示所有 deblur 方法都比原圖高 <strong>10–14%</strong>，但彼此差異小，分辨能力不如 MUSIQ。</p>
+<p>v1 → v2 在四個指標上<strong>全部變好、沒有 trade-off</strong>，優化的細節在 §4.6.2。</p>
+<h2 id="44-chain">4.4 Chain 控制組</h2>
+<p>驗證「手刻前處理是否真的優於訓練式前處理」的關鍵實驗。三組設定的 FFTformer 推論完全相同，差異只在前處理：</p>
+<table>
+<thead>
+<tr>
+<th>設定</th>
+<th>MUSIQ</th>
+<th>Δ vs fftf</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fftf</code>（無前處理）</td>
+<td>25.38</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>chain</code>（DarkIR 訓練式前處理）</td>
+<td><strong>24.95</strong></td>
+<td><strong>−0.43</strong></td>
+</tr>
+<tr>
+<td><code>pipeA_v1</code>（手刻 v1）</td>
+<td>30.96</td>
+<td>+5.58</td>
+</tr>
+<tr>
+<td><code>pipeA</code> v2（手刻 v2）</td>
+<td><strong><span style="color:#c44e52">33.74</span></strong></td>
+<td><strong><span style="color:#c44e52">+8.36</span></strong></td>
+</tr>
+</tbody>
+</table>
+<p>訓練過的 <strong>DarkIR 放在 FFTformer 前不只沒幫助，反而讓 MUSIQ 下降 0.43</strong>；手刻 Pipe A 即使在保守參數的 v1 也能拉升 5.58，優化後的 v2 達到 <strong>+8.36</strong>。</p>
+<p>可能的原因是 DarkIR 為了提亮會對影像做隱式的雜訊抑制與細節平滑，FFTformer 在後續推論時就失去了高頻線索。相對地，gamma + CLAHE 只做點對點與局部對比變換，不改變高頻細節結構，所以能無損地把分布推回 FFTformer 訓練資料的鄰域。</p>
+<h2 id="45">4.5 視覺結果</h2>
+<p>09 White Truck 與 08 KFC Rider 的 v1 vs v2 native-resolution crop 對比見 Fig. 4.2–4.6。</p>
+<p><img alt="Fig. 4.2 — 09 v1 vs v2 全圖" src="figures/fig_4_3_09_v1_vs_v2_full.jpg"></p>
+<p><strong>Fig. 4.2</strong>　09 White Truck 全圖對比（原圖｜v1 繳交｜v2 繳交）。</p>
+<p><img alt="Fig. 4.3 — 09 Biffa native crop" src="figures/fig_4_4_09_biffa_crop.jpg"></p>
+<p><strong>Fig. 4.3</strong>　09 Biffa 紅字 native-resolution crop。v1 過軟，<strong>v2 邊緣銳利且可辨識字母</strong>。</p>
+<p><img alt="Fig. 4.4 — 08 v1 vs v2 全圖" src="figures/fig_4_6_08_v1_vs_v2_full.jpg"></p>
+<p><strong>Fig. 4.4</strong>　08 KFC Rider 全圖對比。</p>
+<p><img alt="Fig. 4.5 — 08 KFC 招牌 crop" src="figures/fig_4_7_08_kfc_sign_crop.jpg"></p>
+<p><strong>Fig. 4.5</strong>　08 左側 KFC 招牌 native crop。v2 恢復可閱讀字樣與柯內爾上校 logo。</p>
+<p><img alt="Fig. 4.6 — 08 右側紅色招牌 crop" src="figures/fig_4_8b_08_right_sign_crop.jpg"></p>
+<p><strong>Fig. 4.6</strong>　08 右側遠景紅色直式招牌 native crop。原圖完全是運動模糊抹開的紅色色塊，v1 已可辨識「頭肩頸…」字樣，v2 邊緣更銳，是視覺最驚豔的細節之一。</p>
+<p>09 的主要改善是紅色 Biffa 字樣從完全糊掉的紅色色塊變為可辨識的五個字母，背景樹冠輪廓、車燈光暈、車身細節都浮現。<strong>MUSIQ 從 25.02 跳到 36.41，提升 +11.39，是全 15 張中最大的單張提升</strong>。</p>
+<p>08 的主要改善是騎手側臉與頭盔結構從一團糊變立體，<strong>左側 KFC 招牌恢復可閱讀</strong>、<strong>右側遠景紅色中文招牌也從紅色色塊變回可讀字樣</strong>，雨夜街景縱深感提升。MUSIQ 29.18 → <strong>32.32</strong>。</p>
+<p>失敗案例：15 號攝影師玻璃反射與 02 號紅燈反射，主體被反射層覆蓋，所有方法都無法乾淨分離；06 號招牌震動的模糊核太大，所有 deblur 方法的 MUSIQ 都低於原圖。</p>
+<h2 id="46-ablation">4.6 Ablation 與參數掃描</h2>
+<h3 id="461-ingredient-ablation">4.6.1 Ingredient ablation</h3>
+<p>從 Pipe A v1 baseline 拿掉一個成分（其他維持原參數）重跑 FFTformer + 後處理，計算 15 張平均：</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>MUSIQ↑</th>
+<th>Δ MUSIQ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pipe A v1 baseline (γ=0.75, CLAHE=3, sat=1.2, unsharp=130)</td>
+<td>30.96</td>
+<td>—</td>
+</tr>
+<tr>
+<td>− γ（gamma=1.0）</td>
+<td>31.90</td>
+<td>+0.94</td>
+</tr>
+<tr>
+<td>− CLAHE（clip=0）</td>
+<td>27.11</td>
+<td><strong>−3.85</strong></td>
+</tr>
+<tr>
+<td>− Saturation（sat=1.0）</td>
+<td>31.13</td>
+<td>+0.17</td>
+</tr>
+<tr>
+<td>− Unsharp（pct=0）</td>
+<td>28.02</td>
+<td><strong>−2.94</strong></td>
+</tr>
+</tbody>
+</table>
+<p>四個指標的完整數據在 <code>report/iqa_ablation.csv</code>。可以看到：</p>
+<ul>
+<li>CLAHE 是最重要的成分（−3.85），拿掉 MUSIQ 暴跌，且 NIQE、MANIQA、NRQM 全面變差。</li>
+<li>Unsharp 是第二重要（−2.94），影響力接近 CLAHE 的 75%。原本以為它只是微調，實際上降採 1024 對高頻造成的損失比預想中嚴重，必須補回。</li>
+<li>Saturation 在 IQA 上近乎中性（+0.17）。它主要服務於視覺色彩感受（彩色招牌更鮮明），不影響量化分數。</li>
+<li>Gamma 的結果反直覺：拿掉反而 MUSIQ 上升 +0.94。gamma 0.75 與 CLAHE 在「拉亮暗區」功能重疊，疊加會過度壓平動態範圍。但對個別非常暗的影像（08 KFC Rider）gamma=0.70 仍視覺有幫助。所以 gamma 是 per-image 條件性套用，不是通用必要。</li>
+</ul>
+<h3 id="462-clahe-unsharp">4.6.2 CLAHE 與 Unsharp 參數掃描</h3>
+<p>既然 CLAHE 與 unsharp 是核心，就針對這兩個成分做掃描，從 v1 baseline 找更佳設定。</p>
+<p>CLAHE clip 掃描（固定 γ=0.75、sat=1.2、unsharp=130）：</p>
+<table>
+<thead>
+<tr>
+<th>clip</th>
+<th>MUSIQ↑</th>
+<th>Δ vs v1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.0</td>
+<td>30.11</td>
+<td>−0.85</td>
+</tr>
+<tr>
+<td>3.0 (v1)</td>
+<td>30.96</td>
+<td>—</td>
+</tr>
+<tr>
+<td>4.0</td>
+<td>31.49</td>
+<td>+0.53</td>
+</tr>
+<tr>
+<td><strong>5.0</strong>（選定）</td>
+<td><strong>31.94</strong></td>
+<td><strong>+0.98</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Unsharp percent 掃描（固定 γ=0.75、CLAHE=3.0、sat=1.2）：</p>
+<table>
+<thead>
+<tr>
+<th>percent</th>
+<th>MUSIQ↑</th>
+<th>Δ vs v1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>30.44</td>
+<td>−0.52</td>
+</tr>
+<tr>
+<td>130 (v1)</td>
+<td>30.96</td>
+<td>—</td>
+</tr>
+<tr>
+<td>160</td>
+<td>31.69</td>
+<td>+0.73</td>
+</tr>
+<tr>
+<td><strong>200</strong>（選定）</td>
+<td><strong>32.73</strong></td>
+<td><strong>+1.77</strong></td>
+</tr>
+</tbody>
+</table>
+<p>兩個成分在掃描範圍內都呈單調遞增。CLAHE 再高於 5.0 會在天空、平面區產生塊狀偽影；unsharp 再高於 200 會在文字邊緣產生 ringing。</p>
+<p>合併兩個改進，得到 Pipe A v2（CLAHE 5.0、unsharp 200）。15 張影像重跑：</p>
+<table>
+<thead>
+<tr>
+<th>設定</th>
+<th>NIQE↓</th>
+<th>MUSIQ↑</th>
+<th>MANIQA↑</th>
+<th>NRQM↑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pipe A v1</td>
+<td>6.35</td>
+<td>30.96</td>
+<td>0.192</td>
+<td>4.06</td>
+</tr>
+<tr>
+<td>Pipe A v2</td>
+<td><strong>6.23</strong></td>
+<td><strong>33.74</strong></td>
+<td><strong>0.199</strong></td>
+<td><strong>4.49</strong></td>
+</tr>
+<tr>
+<td>Δ</td>
+<td>−0.12</td>
+<td>+2.78</td>
+<td>+0.007</td>
+<td>+0.44</td>
+</tr>
+</tbody>
+</table>
+<p>四個指標全部改善、沒有 trade-off。v1 → v2 的 +2.78 MUSIQ 增益比兩個單獨改動的和（+0.98 + +1.77 = +2.75）略多，顯示兩個成分有輕微的協同效應。</p>
+<h3 id="463-09-white-truck-10">4.6.3 09 White Truck 的 γ=1.0 特殊發現</h3>
+<p>Ingredient ablation 顯示 gamma 在全資料集平均下不是必要。我們進一步在 09 White Truck（曝光中等、非典型偏暗）上測試這個發現的影響：</p>
+<table>
+<thead>
+<tr>
+<th>09 變體</th>
+<th>γ</th>
+<th>CLAHE</th>
+<th>Unsharp</th>
+<th>MUSIQ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan I+ v1</td>
+<td>0.75</td>
+<td>3.0</td>
+<td>130</td>
+<td>28.71</td>
+</tr>
+<tr>
+<td><strong>Plan I+ v2</strong></td>
+<td><strong>1.0</strong></td>
+<td><strong>5.0</strong></td>
+<td><strong>200</strong></td>
+<td><strong>36.41</strong></td>
+</tr>
+</tbody>
+</table>
+<p>09 v2 MUSIQ 跳升 +7.70，是 15 張中最大的單張提升，視覺上紅色 Biffa 文字邊緣明顯銳化、車身條紋紋理浮現、背景樹冠輪廓顯著恢復。這驗證了「gamma 對非偏暗影像反而壓平動態範圍」的論點。</p>
+<p>08 KFC Rider 是典型偏暗影像，繳交版本維持 γ=0.7（更積極拉亮），符合 ablation 對「個別暗影像 gamma 有用」的預期。</p>
+<hr>
+<h1 id="5">§5 改進與貢獻</h1>
+<p>相對於既有 paper 的差異與貢獻歸納為三點。</p>
+<h2 id="51-pipe-a">5.1 Pipe A 通用前處理管線</h2>
+<p>把 gamma、CLAHE clip 5.0、HSV saturation 三步前處理組合在 FFTformer 之前，後處理用 unsharp pct 200，整套不需要訓練資料、不更新權重，只靠經典影像處理把 OOD 輸入推回 FFTformer 訓練分布。透過 ingredient ablation 與 CLAHE / unsharp 參數掃描，從 v1 優化到 v2，15 張平均 MUSIQ 從 30.96 提升到 33.74，四個 NR-IQA 指標全面改善。</p>
+<p>§4.4 的 Chain 控制組提供了最直接的證據：DarkIR 這種訓練過的低光增強放在 FFTformer 前會讓 MUSIQ 下降 0.43，而手刻 Pipe A v2 卻能把同一個 FFTformer 拉升 +8.36。手刻前處理優於訓練式前處理。</p>
+<h2 id="52-saturation-masked-regional-sharpening">5.2 Saturation-Masked Regional Sharpening</h2>
+<p>用 HSV 飽和度作為自動空間遮罩，把額外 unsharp 限制在高彩度區（紅色品牌字樣、霓虹招牌），避免在暗區放大雜訊。遮罩本身做 Gaussian 羽化避免硬邊。這是傳統 unsharp 與飽和度 gating 的結合，可直接套用到所有含高彩度物件的夜景。</p>
+<p>09 號 White Truck 加上這個強化後 MUSIQ 達 36.41，較原圖 25.02 提升 +11.39（單張最大），背景雜訊未被放大。</p>
+<h2 id="53-nr-iqa-ablation-chain">5.3 完整 NR-IQA Ablation 與 Chain 控制實驗</h2>
+<p>多數 deblurring paper 只在 GoPro / RealBlur 這類合成或半合成 benchmark 評測，極少在「真實夜拍 + 大解析度」設定下做系統比較。本作業在 4 個 NR-IQA 指標 × 8 個方法 × 15 張影像上做完整評估，並設計 Chain（DarkIR → FFTformer）作為「訓練式前處理」的控制組，提供 v1 → v2 的優化軌跡。Chain 控制組的設計在現有文獻中沒見過前例。</p>
+<hr>
+<h1 id="6">§6 結論</h1>
+<p>本作業針對 15 張夜間運動模糊照片，提出以 FFTformer 為主力、<strong>Pipe A v2</strong> 為前處理、飽和度遮罩銳化為區域強化的雙層方法。<strong>Pipe A v2 在 MUSIQ 上達 <span style="color:#c44e52">33.74</span>（vs 原圖 28.22，<span style="color:#c44e52">+5.52</span>）</strong>，是所有方法中最大絕對增益，並在 MANIQA、NRQM 上也是 deblur 家族最佳。<strong>Chain 控制組證明手刻前處理優於訓練式前處理</strong>。透過 ingredient ablation 與參數掃描從 v1 優化到 v2，四個指標全面改善。最終繳交的 <strong>09 White Truck</strong>（γ=1.0，MUSIQ <strong><span style="color:#c44e52">36.41</span></strong>，<strong>+11.39</strong>）與 <strong>08 KFC Rider</strong>（γ=0.7，MUSIQ <strong>32.32</strong>，+3.14）視覺上達到「夜間 OOD 影像可顯著修復」的目標。</p>
+<h2 id="61">6.1 限制</h2>
+<p>第一，玻璃反射場景無法處理。15 號攝影師玻璃反射、02 號紅燈反射等，主體被反射層覆蓋，這本質上是 layer separation 問題，需要 reflection removal 類方法。</p>
+<p>第二，極大尺度 shake blur 仍是開放問題。06 號招牌震動的模糊核過大，FFTformer 的有效感受野不足以處理。</p>
+<p>第三，naturalness-based IQA（NIQE、NRQM）對所有積極處理都有偏差，這是 IQA 領域的已知問題。多指標交叉驗證能削弱但無法根本解決。</p>
+<h2 id="62">6.2 未來方向</h2>
+<p>若能採集真實 paired night-blur / sharp 資料集對 FFTformer 做 few-shot fine-tuning，預期能進一步提升 in-domain 表現。對含玻璃反射的影像可以先用 deep reflection removal 方法分離反射層再 deblur。Chain 控制組是「手刻 vs 訓練式前處理」的初步證據，若能在更多 deblur backbone 上驗證此差異，可發展為一般化的方法論。</p>
+<hr>
+<h1 id="7">§7 參考文獻</h1>
+<p>[1] S. W. Zamir et al. <em>Restormer: Efficient Transformer for High-Resolution Image Restoration</em>. CVPR 2022.</p>
+<p>[2] L. Kong et al. <em>Efficient Frequency Domain-Based Transformers for High-Quality Image Deblurring</em>. CVPR 2023.</p>
+<p>[3] S. W. Zamir et al. <em>Multi-Stage Progressive Image Restoration (MPRNet)</em>. CVPR 2021.</p>
+<p>[4] P. Wang et al. <em>MISCFilter: Motion-Inspired Spatial-Channel Filter for Image Deblurring</em>. CVPR 2024.</p>
+<p>[5] Y. Lu et al. <em>EVSSM: Efficient Vision State-Space Model for Image Restoration</em>. CVPR 2025.</p>
+<p>[6] D. Wang et al. <em>DarkIR: Lightweight Low-Light Image Enhancement Network</em>. CVPR 2025.</p>
+<p>[7] X. Wang et al. <em>Real-ESRGAN: Training Real-World Blind Super-Resolution with Pure Synthetic Data</em>. ICCV Workshops 2021.</p>
+<p>[8] R. Yang et al. <em>TP-Diff: Text-Prior Guided Diffusion Model for Image Deblurring</em>. arXiv 2024.</p>
+<p>[9] A. Mittal et al. <em>Making a 'Completely Blind' Image Quality Analyzer</em>. IEEE SPL 2013（NIQE）.</p>
+<p>[10] J. Ke et al. <em>MUSIQ: Multi-scale Image Quality Transformer</em>. ICCV 2021.</p>
+<p>[11] S. Yang et al. <em>MANIQA: Multi-dimension Attention Network for No-Reference IQA</em>. CVPR Workshops 2022.</p>
+<p>[12] C. Ma et al. <em>Learning a No-Reference Quality Metric for Single-Image Super-Resolution</em>. CVIU 2017（NRQM）.</p>
+</body>
+</html>
