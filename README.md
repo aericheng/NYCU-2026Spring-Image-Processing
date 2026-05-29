@@ -1,6 +1,6 @@
 # 影像處理 Term Project — 夜間運動模糊影像修復
 
-NYCU 影像處理 2026 春 · Term Project
+NYCU 影像處理 · Term Project
 
 **組員**：113950011　鄭名翔　·　[id]　[teammate]　·　[id]　[teammate]
 
@@ -14,21 +14,13 @@ NYCU 影像處理 2026 春 · Term Project
 
 ---
 
-## 方法
+## 方法 — Pipe A v2 Pipeline
 
-主力是 **FFTformer**（CVPR 2023，RealBlur-J pretrained）。在它之上我們設計了一條手刻的 preprocessing pipeline，稱為 **Pipe A v2**：
+主力是 **FFTformer**（CVPR 2023，RealBlur-J pretrained）。在它之上設計了一條手刻的 preprocessing pipeline，稱為 **Pipe A v2**：
 
-```
-Input
-  → gamma 0.75 (per-image)
-  → CLAHE clip = 5.0, grid = 8×8
-  → HSV saturation × 1.2
-  → resize to max-side = 1024
-  → FFTformer (RealBlur-J pretrained)
-  → resize back to native
-  → unsharp mask (radius = 2, percent = 200)
-Output
-```
+<p align="center">
+  <img src="report/figures/fig_3_1_pipeline.png" alt="Pipe A v2 pipeline" width="55%">
+</p>
 
 設計哲學：**把 out-of-distribution（OOD）的夜間影像分布推回 FFTformer 的訓練分布**。整套 pipeline 不需要 training data、不更新權重，純粹用 classical image processing 達成 distribution shift 的效果。
 
@@ -38,25 +30,76 @@ Output
 
 ## 主要結果
 
-15 張影像的 4 個 NR-IQA 指標平均（NIQE / MUSIQ / MANIQA / NRQM）：
+### 量化評估（15 張影像 × 4 個 NR-IQA 指標）
 
-| Method | MUSIQ ↑ | Δ vs input |
-|---|---|---|
-| Input（原圖） | 28.22 | — |
-| FFTformer 單獨 | 25.38 | −2.84 |
-| Chain（DarkIR → FFTformer） | 24.95 | −3.27 |
-| **Pipe A v2**（本方法） | **33.74** | **+5.52** |
+<p align="center">
+  <img src="report/figures/fig_4_1_iqa_bar.png" alt="IQA bar chart" width="100%">
+</p>
+
+| Method | NIQE ↓ | MUSIQ ↑ | MANIQA ↑ | NRQM ↑ |
+|---|---|---|---|---|
+| Input（原圖） | 5.31 | 28.22 | 0.174 | 6.04 |
+| FFTformer 單獨 | 7.05 | 25.38 | 0.194 | 3.20 |
+| Chain（DarkIR → FFTformer） | 6.78 | 24.95 | 0.191 | 3.30 |
+| Pipe A v1（CLAHE 3, unsharp 130） | 6.35 | 30.96 | 0.192 | 4.06 |
+| **Pipe A v2**（本方法） | **6.23** | **33.74** | **0.199** | **4.49** |
+| **Plan I+ v2**（繳交版） | **6.05** | **34.37** | 0.151 | 4.40 |
 
 **Chain control experiment**：把 DarkIR 這種 trained low-light enhancement 放在 FFTformer 前，MUSIQ 反而從 25.38 *下降* 到 24.95；而手刻 Pipe A v2 卻能把同一個 FFTformer 從 25.38 *拉升* 到 33.74。**Handcrafted preprocessing 優於 trained preprocessing**。
 
-### Plan I+ v2 繳交版
+---
 
-| 影像 | 設定 | MUSIQ | Δ vs 原圖 |
-|---|---|---|---|
-| **09 White Truck** | γ=1.0 + Pipe A v2 + masked text sharpen | **36.41** | **+11.39**（單張最大）|
-| **08 KFC Rider** | γ=0.70 + Pipe A v2 + saturation 1.25 | 32.32 | +3.14 |
+## 繳交結果視覺化
 
-繳交檔放在 `final_submissions/I_plus_pipeA_strengthened/`。
+### 09 White Truck （MUSIQ 25.02 → **36.41**，提升 **+11.39**，15 張中最大）
+
+整張對比（左：原圖｜右：v2 繳交版）：
+
+<p align="center">
+  <img src="report/figures/fig_3_2_09_submission_compare.jpg" alt="09 White Truck submission" width="100%">
+</p>
+
+紅色 Biffa 文字 native-resolution crop（左：原圖｜中：v1｜右：v2）：
+
+<p align="center">
+  <img src="report/figures/fig_4_4_09_biffa_crop.jpg" alt="09 Biffa crop" width="100%">
+</p>
+
+### 08 KFC Rider （MUSIQ 29.18 → **32.32**，提升 +3.14）
+
+整張對比（左：原圖｜右：v2 繳交版）：
+
+<p align="center">
+  <img src="report/figures/fig_3_3_08_submission_compare.jpg" alt="08 KFC Rider submission" width="100%">
+</p>
+
+左側 KFC 招牌 native crop（左：原圖｜中：v1｜右：v2）：
+
+<p align="center">
+  <img src="report/figures/fig_4_7_08_kfc_sign_crop.jpg" alt="08 KFC sign crop" width="100%">
+</p>
+
+右側遠景紅色直式招牌 native crop（原圖完全糊掉的紅色色塊 → v2 可辨識「頭肩頸…」字樣）：
+
+<p align="center">
+  <img src="report/figures/fig_4_8b_08_right_sign_crop.jpg" alt="08 right red sign crop" width="100%">
+</p>
+
+### v1 vs v2 全圖對比
+
+09 v1 vs v2（左：原圖｜中：v1｜右：v2）：
+
+<p align="center">
+  <img src="report/figures/fig_4_3_09_v1_vs_v2_full.jpg" alt="09 v1 vs v2 full" width="100%">
+</p>
+
+08 v1 vs v2：
+
+<p align="center">
+  <img src="report/figures/fig_4_6_08_v1_vs_v2_full.jpg" alt="08 v1 vs v2 full" width="100%">
+</p>
+
+繳交檔位於 `final_submissions/I_plus_pipeA_strengthened/`。
 
 ---
 
