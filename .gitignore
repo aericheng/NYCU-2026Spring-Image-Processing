@@ -1,0 +1,29 @@
+# Large folders excluded from git
+results/
+Images/
+FFTformer/
+MISCFilter/
+DarkIR/
+
+# Course material (copyright)
+Term Project.pdf
+
+# Claude state
+.claude/
+
+# Scratch / cache
+__pycache__/
+*.pyc
+*.pyo
+**/_pdf_pages/
+**/_tmp_*/
+**/_preview*.png
+**/_chk*.png
+**/_cover.png
+
+# Per-tool weights (downloaded on demand)
+realesrgan_weights/
+
+# OS noise
+Thumbs.db
+.DS_Store
