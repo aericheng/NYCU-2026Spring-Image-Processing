@@ -49,20 +49,22 @@ window.MathJax = {{
 <style>
 @page {{
   size: A4;
-  margin: 18mm 18mm 18mm 18mm;
+  margin: 14mm 16mm 14mm 16mm;
 }}
 body {{
   font-family: "Microsoft JhengHei", "Microsoft YaHei", "PMingLiU", "SimSun", "Times New Roman", serif;
   font-size: 10.5pt;
-  line-height: 1.55;
+  line-height: 1.5;
   color: #1a1a1a;
-  max-width: 740px;
+  max-width: 760px;
   margin: 0 auto;
+  orphans: 3;
+  widows: 3;
 }}
 h1 {{
   font-size: 17pt;
-  margin-top: 1.4em;
-  margin-bottom: 0.6em;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
   padding: 0.25em 0.5em 0.25em 0.7em;
   border-left: 5px solid #c44e52;
   background: linear-gradient(90deg, #fbeaea 0%, #fff 60%);
@@ -184,11 +186,10 @@ blockquote {{
 }}
 img {{
   max-width: 100%;
-  max-height: 70vh;
+  max-height: 42vh;
   display: block;
-  margin: 0.5em auto;
+  margin: 0.4em auto;
   page-break-inside: avoid;
-  page-break-after: avoid;
 }}
 ul, ol {{
   margin: 0.3em 0;

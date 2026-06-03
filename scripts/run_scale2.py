@@ -1,10 +1,10 @@
-﻿"""Re-run 08/05 subject SUPIR scale x2 with TILED sampling (fixes OOM) + composite."""
+"""Re-run 08/05 subject SUPIR scale x2 with TILED sampling (fixes OOM) + composite."""
 import subprocess
 from pathlib import Path
 import numpy as np
 from PIL import Image
 
-PROJ = Path(r"C:\Users\user\Desktop\NYCU\敶勗???\Term Project")
+PROJ = Path(r"C:\Users\user\Desktop\NYCU\影像處理\Term Project")
 IMAGES = PROJ / "Images"; BATCH = PROJ / "results" / "supir_batch"; WOW = PROJ / "results" / "wow"
 COMFY = Path(r"C:\ProgramData\miniconda3\envs\comfy\python.exe")
 SUPIR_API = PROJ / "scripts" / "supir_api.py"
