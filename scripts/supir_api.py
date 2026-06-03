@@ -1,11 +1,11 @@
 """Headless driver for SUPIR via the running ComfyUI server (3-node graph:
 LoadImage -> SUPIR_Upscale -> SaveImage). Tuned for a Lightning SDXL base
-(low steps / low cfg) and v0F for fidelity on text-bearing subjects.
+(low steps / low cfg); v0F is used with high control to stay anchored to the input.
 
 Usage:
   python supir_api.py --in <crop.png> --out <result.png> [--supir v0F|v0Q]
       [--sdxl RealVisXL_V4.0_Lightning.safetensors] [--steps 10] [--cfg 1.5]
-      [--scale 1.0] [--prompt "..."] [--seed 123]
+      [--scale 1.0] [--control 1.0] [--tiled] [--prompt "..."] [--seed 123]
 """
 import argparse
 import json
