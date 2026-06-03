@@ -1,4 +1,4 @@
-﻿"""Whole-image final pipeline for 08 + 07: FFT whole -> SUPIR whole (tiled @ 4096)
+"""Whole-image final pipeline for 08 + 07: FFT whole -> SUPIR whole (tiled @ 4096)
 -> upscale to native. Negative prompt kills the SUPIR faux-signature artifact.
 
 Outputs: results/final_supir/<stem>/whole_final.png (native), whole_final_view.jpg,
@@ -8,7 +8,7 @@ import subprocess
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
-PROJ = Path(r"C:\Users\user\Desktop\NYCU\敶勗???\Term Project")
+PROJ = Path(r"C:\Users\user\Desktop\NYCU\影像處理\Term Project")
 IMAGES = PROJ / "Images"
 FS = PROJ / "results" / "final_supir"
 DEBLUR = Path(r"C:\ProgramData\miniconda3\envs\deblur\python.exe")

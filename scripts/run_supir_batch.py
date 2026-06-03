@@ -1,4 +1,4 @@
-﻿"""Two-stage subject restoration batch: crop subject (RAW native) -> FFTformer
+"""Two-stage subject restoration batch: crop subject (RAW native) -> FFTformer
 (structure) -> SUPIR (generative detail). Outputs per-subject stage0/1/2 + montage.
 
 Pipeline per subject:
@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
-PROJ = Path(r"C:\Users\user\Desktop\NYCU\敶勗???\Term Project")
+PROJ = Path(r"C:\Users\user\Desktop\NYCU\影像處理\Term Project")
 IMAGES = PROJ / "Images"
 OUT = PROJ / "results" / "supir_batch"
 DEBLUR = Path(r"C:\ProgramData\miniconda3\envs\deblur\python.exe")
@@ -105,7 +105,7 @@ def main():
         d = OUT / stem
         panels = [("RAW", d / "stage0_raw.png"), ("FFTformer", d / "stage1_fft.png")]
         for ver in c["versions"]:
-            panels.append((f"FFT?UPIR {ver}", d / f"stage2_supir_{ver}.png"))
+            panels.append((f"FFT?îUPIR {ver}", d / f"stage2_supir_{ver}.png"))
         loaded = [(l, Image.open(p).convert("RGB")) for l, p in panels if p.exists()]
         if not loaded:
             continue
