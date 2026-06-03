@@ -2,104 +2,46 @@
 
 NYCU 影像處理 · Term Project
 
-**組員**：113950011　鄭名翔　·　[id]　[teammate]　·　[id]　[teammate]
+**組員**：113950011 鄭名翔 · [id] [teammate] · [id] [teammate]
 
 ---
 
 ## 任務
 
-題目給定 15 張夜間或低光環境下拍攝、含有 motion blur 的真實照片，要求從近年發表的開源 deblurring 方法中挑選並改進，最終繳交 2 張視覺最佳的修復結果。
+15 張夜間 / 低光、含 motion blur 的真實照片（6K–8K，無 ground truth），從近年開源 deblurring 方法挑選並改進，自選 2 張最佳結果繳交。
 
-挑戰：解析度落在 6K~8K、低光 + noise + 大尺度 blur kernel、無 ground truth（不能用 PSNR / SSIM）。
+挑戰：低光 + noise + 大尺度 blur kernel + 高解析度 + 夜景分布 OOD。
 
 ---
 
-## 方法 — Pipe A v2 Pipeline
+## 方法概要
 
-主力是 **FFTformer**（CVPR 2023，RealBlur-J pretrained）。在它之上設計了一條手刻的 preprocessing pipeline，稱為 **Pipe A v2**：
+基礎方法為 FFTformer (CVPR 2023) frequency-domain transformer 去模糊（RealBlur-J pretrained）。在其上提出兩個改進：
 
-<p align="center">
-  <img src="report/figures/fig_3_1_pipeline.png" alt="Pipe A v2 pipeline" width="55%">
-</p>
+1. 解析度策略：回歸式去模糊的最佳解析度與 blur kernel 大小成反比（重度 zoom blur 要 downscale，輕度 panning 用高解析度 tiling）；即使選對解析度，回歸式輸出仍偏平滑。
+2. 生成式補高頻：以 SUPIR (CVPR 2024) 的擴散先驗補回回歸模型缺少的紋理。
 
-設計哲學：**把 out-of-distribution（OOD）的夜間影像分布推回 FFTformer 的訓練分布**。整套 pipeline 不需要 training data、不更新權重，純粹用 classical image processing 達成 distribution shift 的效果。
+完整管線：裁視覺中心主體 → FFTformer（提供結構）→ SUPIR-v0F ×2（生成細節）→ 羽化合成（保留背景追焦模糊）→ 後製調色。最後一步以自寫程式 `cinematic_grade.py`（OpenCV/NumPy）完成，全程未使用 Photoshop 等封閉工具。
 
-針對個別影像的瓶頸再加上 **Saturation-Masked Sharpening**——用 HSV 飽和度作為自動 spatial mask，只在高彩度區（紅色 logo、霓虹文字）追加 unsharp，避免在暗區放大 noise。
+<p align="center"><img src="report/figures/rpt_f1_pipeline.png" width="100%"></p>
+
+完整方法、對照實驗與未採用的方向（整張 vs 裁主體、人臉、DiffTSR 中文文字）見 `report/Report.pdf`。
 
 ---
 
 ## 主要結果
 
-### 量化評估（15 張影像 × 4 個 NR-IQA 指標）
+繳交 2 張：08 KFC 外送員、05 紅色計程車。主體補回 FFTformer 輸出缺少的高頻紋理，背景保留追焦模糊。MUSIQ 分三階段，顯示增益來自去模糊而非調色：
 
-<p align="center">
-  <img src="report/figures/fig_4_1_iqa_bar.png" alt="IQA bar chart" width="100%">
-</p>
+| 影像 | RAW | 去模糊（未調色） | FINAL（含調色） |
+|---|---|---|---|
+| 08 KFC 外送員 | 35.44 | 42.27 | 40.76 |
+| 05 紅色計程車 | 28.55 | 51.04 | 50.57 |
 
-| Method | NIQE ↓ | MUSIQ ↑ | MANIQA ↑ | NRQM ↑ |
-|---|---|---|---|---|
-| Input（原圖） | 5.31 | 28.22 | 0.174 | 6.04 |
-| FFTformer 單獨 | 7.05 | 25.38 | 0.194 | 3.20 |
-| Chain（DarkIR → FFTformer） | 6.78 | 24.95 | 0.191 | 3.30 |
-| Pipe A v1（CLAHE 3, unsharp 130） | 6.35 | 30.96 | 0.192 | 4.06 |
-| **Pipe A v2**（本方法） | **6.23** | **33.74** | **0.199** | **4.49** |
-| **Plan I+ v2**（繳交版） | **6.05** | **34.37** | 0.151 | 4.40 |
+<p align="center"><img src="report/figures/rpt_f5_result_08.jpg" width="100%"></p>
+<p align="center"><img src="report/figures/rpt_f6_result_05.jpg" width="100%"></p>
 
-**Chain control experiment**：把 DarkIR 這種 trained low-light enhancement 放在 FFTformer 前，MUSIQ 反而從 25.38 *下降* 到 24.95；而手刻 Pipe A v2 卻能把同一個 FFTformer 從 25.38 *拉升* 到 33.74。**Handcrafted preprocessing 優於 trained preprocessing**。
-
----
-
-## 繳交結果視覺化
-
-### 09 White Truck （MUSIQ 25.02 → **36.41**，提升 **+11.39**，15 張中最大）
-
-整張對比（左：原圖｜右：v2 繳交版）：
-
-<p align="center">
-  <img src="report/figures/fig_3_2_09_submission_compare.jpg" alt="09 White Truck submission" width="100%">
-</p>
-
-紅色 Biffa 文字 native-resolution crop（左：原圖｜中：v1｜右：v2）：
-
-<p align="center">
-  <img src="report/figures/fig_4_4_09_biffa_crop.jpg" alt="09 Biffa crop" width="100%">
-</p>
-
-### 08 KFC Rider （MUSIQ 29.18 → **32.32**，提升 +3.14）
-
-整張對比（左：原圖｜右：v2 繳交版）：
-
-<p align="center">
-  <img src="report/figures/fig_3_3_08_submission_compare.jpg" alt="08 KFC Rider submission" width="100%">
-</p>
-
-左側 KFC 招牌 native crop（左：原圖｜中：v1｜右：v2）：
-
-<p align="center">
-  <img src="report/figures/fig_4_7_08_kfc_sign_crop.jpg" alt="08 KFC sign crop" width="100%">
-</p>
-
-右側遠景紅色直式招牌 native crop（原圖完全糊掉的紅色色塊 → v2 可辨識「頭肩頸…」字樣）：
-
-<p align="center">
-  <img src="report/figures/fig_4_8b_08_right_sign_crop.jpg" alt="08 right red sign crop" width="100%">
-</p>
-
-### v1 vs v2 全圖對比
-
-09 v1 vs v2（左：原圖｜中：v1｜右：v2）：
-
-<p align="center">
-  <img src="report/figures/fig_4_3_09_v1_vs_v2_full.jpg" alt="09 v1 vs v2 full" width="100%">
-</p>
-
-08 v1 vs v2：
-
-<p align="center">
-  <img src="report/figures/fig_4_6_08_v1_vs_v2_full.jpg" alt="08 v1 vs v2 full" width="100%">
-</p>
-
-繳交檔位於 `final_submissions/I_plus_pipeA_strengthened/`。
+繳交檔位於 `final_submissions/SUPIR_2026-06-03/`。
 
 ---
 
@@ -107,105 +49,64 @@ NYCU 影像處理 · Term Project
 
 ```
 .
-├── README.md                       本檔案
+├── README.md
+├── Term Project.pdf                 作業規格（課程材料）
+├── Images/                          15 張原圖（題目提供，.gitignore 排除）
+├── scripts/                         所有程式碼
+│   ├── preprocess.py / unsharp.py / masked_sharpen.py
+│   ├── run_pipea_v2.py              Pipe A v2 baseline（前一代方法）
+│   ├── run_perimage_v3.py           解析度策略（per-image resolution）
+│   ├── run_supir_batch.py           兩階段 FFTformer→SUPIR 主體修復
+│   ├── run_scale2.py                SUPIR scale ×2
+│   ├── run_whole_finals.py          整張 SUPIR（對照）
+│   ├── cinematic_grade.py           後製調色（OpenCV/NumPy）
+│   ├── supir_api.py                 headless 驅動 ComfyUI SUPIR
+│   ├── compute_musiq_final.py       重現報告第 6 節的 MUSIQ 數字
+│   ├── compute_iqa.py / plot_*.py   NR-IQA 評分與視覺化（baseline 比較）
+│   ├── build_plans.py               生成舊 Pipe A 繳交資料夾（對照用）
+│   └── md_to_pdf.py / make_report_figures.py
 ├── report/
-│   ├── Report_full.md              書面報告（markdown source）
-│   ├── Report_full.pdf             書面報告（PDF，13 pages）
-│   ├── PPT_outline.md              簡報大綱
-│   ├── PPT_script.md               簡報講稿
-│   ├── iqa_table.md                完整 IQA 數據與解讀
-│   ├── iqa_*.csv                   per-image 量化分數
-│   └── figures/                    所有報告用圖檔
+│   ├── Report.md / Report.pdf       書面報告
+│   ├── figures/                     報告用圖（rpt_*）
+│   └── PPT_outline.md               課堂報告投影片大綱
 ├── final_submissions/
-│   └── I_plus_pipeA_strengthened/  Plan I+ v2 繳交檔（08 + 09）
-├── compare/v1_vs_v2/               v1 vs v2 native-resolution crops
-├── preprocess.py                   gamma + CLAHE + saturation
-├── masked_sharpen.py               saturation-masked unsharp
-├── unsharp.py                      基本 unsharp
-├── run_pipea_v2.py                 Pipe A v2 主管線
-├── run_ablation.py                 ingredient ablation runner
-├── run_clahe_sweep.py              CLAHE clip parameter sweep
-├── run_quick_variants.py           unsharp sweep + 09 γ=1.0
-├── compute_iqa.py                  主 IQA scoring
-├── compute_iqa_ablation.py         ablation IQA
-├── compute_iqa_tier1.py            sweep IQA
-├── plot_iqa.py                     bar chart 視覺化
-├── plot_pipeline.py                Pipe A pipeline diagram
-├── build_plans.py                  生成繳交資料夾
-└── md_to_pdf.py                    markdown → PDF（headless Chrome）
+│   └── SUPIR_2026-06-03/            最終 2 張 + 對比圖 + README
+└── results/                         輸出（.gitignore 排除，可由腳本重跑）
 ```
-
-不放進 repo 但需要的（由 `.gitignore` 排除）：
-
-- `Images/`：15 張原始影像（題目提供）
-- `results/`：所有方法的 inference 輸出（~3 GB，可由腳本重跑）
-- `FFTformer/` / `MISCFilter/` / `DarkIR/`：upstream model code，請到原 repo 取得
-- `Term Project.pdf`：作業規格（課程材料）
 
 ---
 
-## 復現流程
+## 復現
 
-### Environment
-
-NVIDIA GPU（Blackwell sm_120 需要 PyTorch 2.11.0+cu128）+ cupy 13.x。
-
-```bash
-conda create -n deblur python=3.11
-conda activate deblur
-pip install torch --index-url https://download.pytorch.org/whl/cu128
-pip install pyiqa pymupdf cupy-cuda12x basicsr matplotlib pillow opencv-python markdown
-```
-
-幾個相容性 patch 要踩：
-- `basicsr` 需要 monkey-patch（移除已被廢棄的 `torchvision.transforms.functional_tensor` import）
-- FFTformer 用 `importlib.util.spec_from_file_location` 繞過破損的 `basicsr` import chain
-- MISCFilter 的 inline CUDA kernel 要改寫成 cupy 12+ 的 `RawModule` API
+### 環境
+- **`deblur`** conda env：FFTformer，PyTorch 2.11+cu128（RTX 5070 Ti / Blackwell sm_120），pyiqa。
+- **`comfy`** conda env：ComfyUI + [kijai/ComfyUI-SUPIR](https://github.com/kijai/ComfyUI-SUPIR)，與 deblur 隔離以保護 sm_120 torch。
+  - 模型：`SUPIR-v0F_fp16.safetensors`（[Kijai/SUPIR_pruned](https://huggingface.co/Kijai/SUPIR_pruned)）+ `RealVisXL_V4.0_Lightning.safetensors`（SDXL base）。
 
 ### Model weights
+- **FFTformer**：[kkkls/FFTformer](https://github.com/kkkls/FFTformer)，`pretrain_model/Realblur/net_g_Realblur_J.pth`
+- **SUPIR / RealVisXL**：見上。
 
-- **FFTformer**：[`kkkls/FFTformer`](https://github.com/kkkls/FFTformer)，使用 `pretrain_model/Realblur/net_g_Realblur_J.pth`
-- **DarkIR**：[`cidautai/DarkIR`](https://github.com/cidautai/DarkIR)（ablation 用）
-- **MISCFilter**：[`ChengxuLiu/MISCFilter`](https://github.com/ChengxuLiu/MISCFilter)（ablation 用）
-
-### 跑主管線（產生繳交檔）
-
+### 跑主管線
 ```bash
-python run_pipea_v2.py            # Pipe A v2 baseline + 08 / 09 繳交版
-python build_plans.py             # 生成 final_submissions/ 內的 compare jpg + PNG
+# 1) 兩階段主體修復（FFTformer 結構 -> SUPIR 細節）
+python scripts/run_supir_batch.py        # 需先啟動 ComfyUI server (comfy env)
+# 2) SUPIR scale x2
+python scripts/run_scale2.py
+# 3) 後製調色（自寫 OpenCV/NumPy 程式，非 Photoshop），輸出最終
+python scripts/cinematic_grade.py
+# 4) 量化（MUSIQ）+ 報告圖檔 + PDF
+python scripts/compute_musiq_final.py
+python scripts/make_report_figures.py
+python scripts/md_to_pdf.py
 ```
 
-### Ablation
-
-```bash
-python run_ablation.py            # ingredient ablation（拿掉每個成分）
-python compute_iqa_ablation.py    # 評分
-
-python run_clahe_sweep.py         # CLAHE clip sweep
-python run_quick_variants.py      # unsharp sweep + 09 γ=1.0 variant
-python compute_iqa_tier1.py       # 評分
-```
-
-### 主 IQA 表與視覺化
-
-```bash
-python compute_iqa.py             # 8 methods × 4 metrics × 15 images
-python plot_iqa.py                # bar chart → report/figures/
-python plot_pipeline.py           # Pipe A diagram → report/figures/
-```
-
-### 生成書面報告 PDF
-
-```bash
-python md_to_pdf.py               # report/Report_full.md → Report_full.pdf
-```
+啟動 ComfyUI SUPIR server：`comfy_python C:\Users\user\ComfyUI\main.py --port 8188`，再以 `scripts/supir_api.py` headless 驅動。
 
 ---
 
 ## 限制與未來方向
 
-- **Glass reflection 場景無法處理**（15 號攝影師反射、02 號紅燈反射）——這本質上是 layer separation 問題，需要 reflection removal 類方法
-- **極大尺度 shake blur** 仍是 open problem（06 號招牌震動，blur kernel 太大）
-- NIQE 與 NRQM 對所有 aggressive processing 都有偏差，這是 NR-IQA 領域的 known limitation
-
-未來方向：用真實 paired night-blur dataset 對 FFTformer 做 few-shot fine-tuning；對 glass reflection 場景整合 deep reflection removal；在更多 deblur backbones 上驗證「handcrafted vs trained preprocessing」的差異。
+- **Glass reflection / 多重曝光**（02、15）：layer separation 問題，需 reflection removal。
+- **生成式 fidelity**：人臉 identity drift、中文品牌字無法還原為正確字（資訊已被模糊物理抹除）。
+- **未來**：真實 paired night-blur fine-tune；deep reflection removal；brand-font-aware 中文文字修復。

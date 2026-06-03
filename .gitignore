@@ -27,3 +27,6 @@ realesrgan_weights/
 # OS noise
 Thumbs.db
 .DS_Store
+
+# report intermediate
+report/*.html
