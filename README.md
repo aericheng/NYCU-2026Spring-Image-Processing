@@ -44,6 +44,7 @@ NYCU 影像處理 · Term Project
 ```
 .
 ├── README.md
+├── requirements.txt                 deblur 環境 Python 套件
 ├── Term Project.pdf                 作業規格（課程材料）
 ├── Images/                          15 張原圖（題目提供，.gitignore 排除）
 ├── FFTformer/                       去模糊方法 checkout（.gitignore 排除，需 clone kkkls/FFTformer）
@@ -63,25 +64,31 @@ NYCU 影像處理 · Term Project
 
 ---
 
-## 復現
+## 復現（從頭設定）
 
-### 環境
-- **`deblur`** conda env：FFTformer，PyTorch 2.11+cu128（RTX 5070 Ti / Blackwell sm_120），pyiqa。
-- **`comfy`** conda env：ComfyUI + [kijai/ComfyUI-SUPIR](https://github.com/kijai/ComfyUI-SUPIR)，與 deblur 隔離以保護 sm_120 torch。
-  - 模型：`SUPIR-v0F_fp16.safetensors`（[Kijai/SUPIR_pruned](https://huggingface.co/Kijai/SUPIR_pruned)）+ `RealVisXL_V4.0_Lightning.safetensors`。
+repo 只含程式碼、報告與成品；原圖、模型權重、FFTformer 與 ComfyUI 都需自行準備。
 
-### Model weights
-- **FFTformer**：[kkkls/FFTformer](https://github.com/kkkls/FFTformer)，`pretrain_model/Realblur/net_g_Realblur_J.pth`
-- **SUPIR / RealVisXL**：見上。
+**1. Python 套件（deblur 環境）**
+`pip install -r requirements.txt`。FFTformer 推論另需 PyTorch；Blackwell sm_120（RTX 50xx）我們用 torch 2.11+cu128，請依自己的 GPU/CUDA 從 [pytorch.org](https://pytorch.org) 選對應 build。
 
-### 跑主管線
+**2. 原圖**
+把助教提供的 15 張照片放進 `Images/`（`.gitignore` 排除，repo 不含）。
+
+**3. FFTformer（去模糊）**
+clone [kkkls/FFTformer](https://github.com/kkkls/FFTformer) 到專案根目錄的 `FFTformer/`，並把 RealBlur-J 權重放到 `FFTformer/pretrain_model/Realblur/net_g_Realblur_J.pth`。
+
+**4. ComfyUI + SUPIR（獨立 comfy 環境）**
+安裝 ComfyUI 與 [kijai/ComfyUI-SUPIR](https://github.com/kijai/ComfyUI-SUPIR) 節點（與 deblur 隔離以保護 sm_120 torch）。權重：`SUPIR-v0F_fp16.safetensors`（[Kijai/SUPIR_pruned](https://huggingface.co/Kijai/SUPIR_pruned)）+ SDXL 底模 `RealVisXL_V4.0_Lightning.safetensors`。
+
+**5. 跑**
 ```bash
-# 0) 啟動 ComfyUI SUPIR server（comfy env）
-python C:\Users\user\ComfyUI\main.py --port 8188
-# 1) 一鍵重現兩張繳交圖（deblur env；內部呼叫 FFTformer 與 supir_api.py）
+# 啟動 ComfyUI SUPIR server（comfy env）
+python <ComfyUI>/main.py --port 8188
+# 一鍵重現兩張繳交圖（deblur env；內部呼叫 FFTformer 與 supir_api.py，
+# 完成後寫入 final_submissions/Faces_2026-06-04/）
 python scripts/run_face_restore.py
 ```
-`run_face_restore.py` 的 `FACES` 設定記錄了每張臉的裁切框、前處理與 SUPIR 參數
-（裁臉 → FFTformer RealBlur-J 去模糊 → SUPIR v0F 補細節 → 羽化合成 / 裁切 → 輕度調色）。
 
-限制與未來方向見 `report/Report.pdf` 第 8 節。
+**換機器時的路徑覆寫**：腳本路徑皆由 `__file__` 推導；下列環境變數可覆寫預設（都有合理預設值）——`COMFY_PYTHON`（comfy 環境 python）、`FFTFORMER_DIR`、`COMFYUI_DIR`、`COMFYUI_SERVER`（預設 `http://127.0.0.1:8188`）、`CHROME_PATH`（`md_to_pdf.py` 用）。
+
+`run_face_restore.py` 的 `FACES` 設定記錄每張臉的裁切框、前處理與 SUPIR 參數。限制與未來方向見 `report/Report.pdf` 第 8 節。

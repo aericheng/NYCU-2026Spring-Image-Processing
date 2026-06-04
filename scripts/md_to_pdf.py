@@ -5,6 +5,7 @@ Pipeline:
   2. Wrap in HTML template (academic CSS + CJK font + MathJax for $...$ LaTeX)
   3. Headless Chrome --print-to-pdf with virtual-time-budget so MathJax finishes
 """
+import os
 import shutil
 import subprocess
 import sys
@@ -12,11 +13,11 @@ from pathlib import Path
 
 import markdown
 
-PROJ = Path(r"C:\Users\user\Desktop\NYCU\影像處理\Term Project")
+PROJ = Path(__file__).resolve().parent.parent
 SRC_MD  = PROJ / "report" / "Report.md"
 OUT_HTML = PROJ / "report" / "Report.html"
 OUT_PDF  = PROJ / "report" / "Report.pdf"
-CHROME = Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe")
+CHROME = Path(os.environ.get("CHROME_PATH", r"C:\Program Files\Google\Chrome\Application\chrome.exe"))
 
 print(f"[info] reading {SRC_MD}")
 md_text = SRC_MD.read_text(encoding="utf-8")

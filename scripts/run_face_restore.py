@@ -12,21 +12,25 @@ Requires: the FFTformer/ checkout (deblur env) and a running ComfyUI SUPIR
 server on :8188 (comfy env) — see README. Saving uses PIL because cv2.imwrite
 fails on this non-ASCII project path.
 """
+import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import cv2
 import numpy as np
 from PIL import Image, ImageFilter
 
-PROJ = Path(r"C:\Users\user\Desktop\NYCU\影像處理\Term Project")
+# Paths derive from this file; per-machine bits are overridable via env vars.
+PROJ = Path(__file__).resolve().parent.parent
 IMAGES = PROJ / "Images"
 OUT = PROJ / "results" / "final2"
 SUB = PROJ / "final_submissions" / "Faces_2026-06-04"
-DEBLUR = Path(r"C:\ProgramData\miniconda3\envs\deblur\python.exe")
-COMFY = Path(r"C:\ProgramData\miniconda3\envs\comfy\python.exe")
-FFT_DIR = PROJ / "FFTformer"
+DEBLUR = sys.executable                       # FFTformer runs in this (deblur) env
+COMFY = Path(os.environ.get("COMFY_PYTHON",   # comfy env python (ComfyUI + SUPIR)
+                            r"C:\ProgramData\miniconda3\envs\comfy\python.exe"))
+FFT_DIR = Path(os.environ.get("FFTFORMER_DIR", str(PROJ / "FFTformer")))
 WEIGHTS = "pretrain_model/Realblur/net_g_Realblur_J.pth"
 SUPIR_API = PROJ / "scripts" / "supir_api.py"
 

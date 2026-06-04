@@ -9,14 +9,15 @@ Usage:
 """
 import argparse
 import json
+import os
 import shutil
 import time
 import urllib.request
 import uuid
 from pathlib import Path
 
-COMFY = Path(r"C:\Users\user\ComfyUI")
-SERVER = "http://127.0.0.1:8188"
+COMFY = Path(os.environ.get("COMFYUI_DIR", r"C:\Users\user\ComfyUI"))
+SERVER = os.environ.get("COMFYUI_SERVER", "http://127.0.0.1:8188")
 
 SUPIR_FILES = {
     "v0F": "SUPIR-v0F_fp16.safetensors",
