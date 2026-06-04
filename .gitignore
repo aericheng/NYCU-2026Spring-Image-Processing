@@ -10,6 +10,7 @@ Term Project.pdf
 
 # Claude state
 .claude/
+CLAUDE.md
 
 # Scratch / cache
 __pycache__/
