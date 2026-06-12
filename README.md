@@ -18,7 +18,7 @@ NYCU 影像處理 · Term Project
 
 基礎為 FFTformer (CVPR 2023) frequency-domain transformer 去模糊（RealBlur-J pretrained）。回歸式去模糊在臉部會遇到天花板：高頻被運動模糊抹除後，輸出偏軟、帶噪。我們在其上加生成式臉部先驗：
 
-裁臉 → **FFTformer**（去運動模糊、提供結構）→ **SUPIR-v0F**（擴散先驗，高 control 補回臉部高頻）→ 羽化合成（背景保留動態模糊）→ 輕度調色（自寫 OpenCV/NumPy，非 Photoshop）。
+前處理（gamma/CLAHE/飽和度）→ 裁臉 → **FFTformer**（去運動模糊、提供結構）→ **SUPIR-v0F**（擴散先驗，高 control 補回臉部高頻）→ 羽化合成（背景保留動態模糊）→ 輕度調色（自寫 OpenCV/NumPy，非 Photoshop）。
 
 <p align="center"><img src="report/figures/face_pipeline.png" width="100%"></p>
 
@@ -91,4 +91,4 @@ python scripts/run_face_restore.py
 
 **換機器時的路徑覆寫**：腳本路徑皆由 `__file__` 推導；下列環境變數可覆寫預設（都有合理預設值）——`COMFY_PYTHON`（comfy 環境 python）、`FFTFORMER_DIR`、`COMFYUI_DIR`、`COMFYUI_SERVER`（預設 `http://127.0.0.1:8188`）、`CHROME_PATH`（`md_to_pdf.py` 用）。
 
-`run_face_restore.py` 的 `FACES` 設定記錄每張臉的裁切框、前處理與 SUPIR 參數。限制與未來方向見 `report/Report.pdf` 第 8 節。
+`run_face_restore.py` 的 `FACES` 設定記錄每張臉的裁切框、前處理與 SUPIR 參數。限制與未來方向見 `report/Report.pdf` 第 7 節。
