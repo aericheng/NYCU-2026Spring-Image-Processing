@@ -186,6 +186,10 @@ blockquote {{
   border-radius: 0 4px 4px 0;
 }}
 img {{
+  /* width/height:auto override the HTML width attribute so the max-* caps
+     scale uniformly — otherwise tall figures get squashed vertically */
+  width: auto;
+  height: auto;
   max-width: 100%;
   max-height: 42vh;
   display: block;
