@@ -1,0 +1,19 @@
+# Build / cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# OS / shell artifacts
+*.stackdump
+.DS_Store
+Thumbs.db
+
+# Internal tooling
+.claude/
+
+# Pipeline log (not part of deliverable)
+results/spatial/_log.txt
