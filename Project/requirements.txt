@@ -1,0 +1,13 @@
+# deblur env — for run_face_restore.py (orchestrator) and md_to_pdf.py (report).
+# supir_api.py uses only the Python standard library.
+numpy
+opencv-python
+Pillow
+markdown
+
+# FFTformer inference (called as a subprocess) needs PyTorch — NOT pinned here
+# because the right build depends on your GPU/CUDA. We used torch 2.11 + cu128 for
+# Blackwell sm_120 (RTX 50xx); install the matching build from https://pytorch.org,
+# e.g.:  pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+#
+# The comfy env (ComfyUI + ComfyUI-SUPIR) is installed separately — see README Setup.
