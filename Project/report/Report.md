@@ -1,5 +1,7 @@
 # 夜間運動模糊的人臉修復：回歸式去模糊結合生成式先驗
 
+PDF report omitted from the public repo for privacy.
+
 NYCU 影像處理 · Term Project
 
 組員：113950011 鄭名翔 · [id] [teammate] · [id] [teammate]（方法設計、實驗與報告由三人共同完成）
