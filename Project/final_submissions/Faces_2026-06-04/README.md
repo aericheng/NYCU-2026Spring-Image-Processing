@@ -12,4 +12,4 @@
 兩張皆為「模糊路人 → 清晰真人臉」的修復（FFTformer 去模糊 + SUPIR v0F 擴散先驗補細節）。
 **#2 女子的眼睛 / 上半臉為 SUPIR 生成**（原圖該區被運動重影破壞，無法真實還原）。#1 男子的五官 layout 在原圖中真實存在、由高 control 緊錨，但高頻細節同樣由先驗合成（prior-guided，非逐像素還原）；差別在約束程度，不在真實 vs 生成。
 
-完整方法、對照實驗與 fidelity 誠實聲明見 `report/Report.pdf`（第 5 節）。
+完整方法、對照實驗與 fidelity 誠實聲明見 `../../report/Report.md`（第 5 節；PDF 版因隱私考量未收錄於本 repo）。

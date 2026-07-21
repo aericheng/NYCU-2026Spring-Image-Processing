@@ -22,7 +22,7 @@ NYCU 影像處理 · Term Project
 
 <p align="center"><img src="report/figures/face_pipeline.png" width="100%"></p>
 
-完整方法、對照實驗與 fidelity 誠實聲明見 `report/Report.pdf`。
+完整方法、對照實驗與 fidelity 誠實聲明見 `report/Report.md`（PDF 版因隱私考量未收錄於本 repo）。
 
 ---
 
@@ -33,7 +33,7 @@ NYCU 影像處理 · Term Project
 <p align="center"><img src="report/figures/face_result_man.jpg" width="100%"></p>
 <p align="center"><img src="report/figures/face_result_woman.jpg" width="100%"></p>
 
-**fidelity**：臉部清晰細節由 SUPIR 擴散先驗合成（prior-guided restoration），非逐像素解卷積。#1 男子五官 layout 在原圖中真實存在（先驗在真實結構上補高頻）；**#2 女子的眼睛 / 上半臉為生成**（原圖被運動重影破壞，無法真實還原）。完整聲明見 `report/Report.pdf` 第 5 節。
+**fidelity**：臉部清晰細節由 SUPIR 擴散先驗合成（prior-guided restoration），非逐像素解卷積。#1 男子五官 layout 在原圖中真實存在（先驗在真實結構上補高頻）；**#2 女子的眼睛 / 上半臉為生成**（原圖被運動重影破壞，無法真實還原）。完整聲明見 `report/Report.md` 第 5 節。
 
 繳交檔位於 `final_submissions/Faces_2026-06-04/`。
 
@@ -54,7 +54,7 @@ NYCU 影像處理 · Term Project
 │   ├── supir_api.py                 headless 驅動 ComfyUI SUPIR
 │   └── md_to_pdf.py                 Report.md -> Report.pdf
 ├── report/
-│   ├── Report.md / Report.pdf       書面報告
+│   ├── Report.md                    書面報告（PDF 版因隱私考量未收錄）
 │   ├── figures/                     報告用圖（face_*）
 │   └── PPT_outline.md               課堂報告投影片大綱
 ├── final_submissions/
@@ -91,4 +91,4 @@ python scripts/run_face_restore.py
 
 **換機器時的路徑覆寫**：腳本路徑皆由 `__file__` 推導；下列環境變數可覆寫預設（都有合理預設值）——`COMFY_PYTHON`（comfy 環境 python）、`FFTFORMER_DIR`、`COMFYUI_DIR`、`COMFYUI_SERVER`（預設 `http://127.0.0.1:8188`）、`CHROME_PATH`（`md_to_pdf.py` 用）。
 
-`run_face_restore.py` 的 `FACES` 設定記錄每張臉的裁切框、前處理與 SUPIR 參數。限制與未來方向見 `report/Report.pdf` 第 7 節。
+`run_face_restore.py` 的 `FACES` 設定記錄每張臉的裁切框、前處理與 SUPIR 參數。限制與未來方向見 `report/Report.md` 第 7 節。
